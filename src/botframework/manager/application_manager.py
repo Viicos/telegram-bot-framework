@@ -29,7 +29,7 @@ class ApplicationManager:
 
     def build(self) -> None:
         """Build the application, using parameters provided by the user configuration."""
-        application_builder = ApplicationBuilder().token(config.api_token)
+        application_builder = ApplicationBuilder().token(config.api_token.get_secret_value())
         if config.persistence:
             persistence = PicklePersistence(filepath=config.persistence_filepath)  # type: ignore
             application_builder.persistence(persistence)
