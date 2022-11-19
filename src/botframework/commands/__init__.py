@@ -9,5 +9,5 @@ async def base_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     Base callback used to log any incoming update.
     Additionnal logic can be added in this callback.
     """
-    log = logging.getLogger("bot")
+    log = logging.getLogger("botframework")
     log.info("Incoming update: %s", update)
