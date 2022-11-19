@@ -1,0 +1,31 @@
+[tool.isort]
+profile = "black"
+combine_as_imports = true
+default_section = "THIRDPARTY"
+src_paths = ["src"]
+line_length = 120
+honor_noqa = true
+known_first_party = "botframework"
+remove_redundant_aliases = true
+
+[tool.black]
+line-length = 120
+
+[project]
+name = "telegram-bot-framework"
+version = "0.0.1"
+requires-python = ">=3.7"
+dependencies = [
+    "python-telegram-bot==20.0a4",
+    "python-dotenv==0.21.0",
+    "tomli==2.0.1;python_version<'3.11'",
+    "pydantic==1.10.2",
+    "typing_extensions==4.4.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pip-tools==6.10.0",
+    "isort==5.10.1",
+    "black==22.10.0"
+]

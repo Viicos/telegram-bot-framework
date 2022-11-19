@@ -1,0 +1,18 @@
+name: typing
+
+on: [push]
+
+jobs:
+  mypy:
+    name: Check code type hints with mypy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - run: pip install -U pip
+      - run: pip install mypy==0.991 types-pytz
+      - run: pip install -r requirements/requirements.txt
+      - run: mypy --strict src/
