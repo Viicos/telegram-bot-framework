@@ -24,7 +24,7 @@ the use of `pydantic <https://github.com/pydantic/pydantic>`_.
 Configure your bot
 ------------------
 
-To get started, configure your application using the ``config_example.toml`` file given in this repository. This file provides basic configuration to your bot (such as your `API token <https://core.telegram.org/bots/api#authorizing-your-bot>_`)
+To get started, configure your application using the ``config_example.toml`` file given in this repository. This file provides basic configuration to your bot (such as your `API token <https://core.telegram.org/bots/api#authorizing-your-bot>`_)
 and your created command handlers.
 
 The following is a description of the available fields in the configuration file:
@@ -67,6 +67,9 @@ The following is a description of the available fields in the configuration file
     handlers = ['console', 'file']
 
 All ``defaults`` fields are optional, and logging config can be tweaked to fit your needs (only the ``botframework`` logger is required).
+
+You can specify the location of your config file with the ``TELEGRAM_CONFIG`` environment variable. If not set, it will try to load the config from the ``config.toml`` file, relative to the current working directory.
+
 
 Creating your first command handler
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -130,3 +133,14 @@ And finally here is the corresponding user configuration:
     active = true  # Whether the command should be added to the bot or not
     [commands.ping.env]  # Command related configuration
     wait_time = 2
+
+Run the application
+-------------------
+
+To run the application, you can call the ``main.py`` file:
+
+.. code-block:: shell
+
+    python src/main.py
+
+It is strongly recommended to use a `virtual environment <https://docs.python.org/3/library/venv.html>`_ to run the application.
