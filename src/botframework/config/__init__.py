@@ -55,6 +55,9 @@ class Config(BaseSettings):
     defaults: Optional[Defaults] = None
     logging: Dict[str, Any]
 
+    class Config:
+        env_prefix = "telegram_"
+
     @classmethod
     def from_toml(cls: type[C], path: Path) -> C:
         if not path.exists():

@@ -70,6 +70,8 @@ All ``defaults`` fields are optional, and logging config can be tweaked to fit y
 
 You can specify the location of your config file with the ``TELEGRAM_CONFIG`` environment variable. If not set, it will try to load the config from the ``config.toml`` file, relative to the current working directory.
 
+Additionally, configuration variables can be read from environment variables (e.g. ``api_token`` will take the value of the environment variable ``telegram_api_key``).
+See `pydantic docs <https://pydantic-docs.helpmanual.io/usage/settings/>`_ for more details.
 
 Creating your first command handler
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
