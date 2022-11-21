@@ -3,11 +3,11 @@ persistence = true
 persistence_filepath = 'bot.data'
 add_base_handler = true
 
-[commands]
+[handlers]
 
-[commands.ping]
+[handlers.ping]
 active = true
-[commands.ping.env]
+[handlers.ping.env]
 wait_time = 2
 
 [defaults]

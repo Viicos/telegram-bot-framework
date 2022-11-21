@@ -4,13 +4,13 @@
 from typing import Any, Dict, TypedDict
 
 from telegram import Update
-from telegram.ext import CommandHandler, ContextTypes
+from telegram.ext import BaseHandler, ContextTypes
 from telegram.ext._utils.types import HandlerCallback
 from typing_extensions import NotRequired
 
 
 class RegisteredHandlerType(TypedDict):
-    handler: CommandHandler[ContextTypes.DEFAULT_TYPE]
+    handler: BaseHandler[Update, ContextTypes.DEFAULT_TYPE]
     group: NotRequired[int]
 
 

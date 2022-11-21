@@ -2,7 +2,17 @@ import logging
 from typing import Optional
 
 from telegram import Update
-from telegram.ext import ApplicationBuilder, CommandHandler, Defaults, PicklePersistence, TypeHandler
+from telegram.ext import (
+    ApplicationBuilder,
+    BaseHandler,
+    CommandHandler,
+    ContextTypes,
+    Defaults,
+    MessageHandler,
+    PicklePersistence,
+    TypeHandler,
+    filters as filters_module,
+)
 
 from botframework.commands import base_callback
 from botframework.config import config
@@ -19,7 +29,7 @@ class ApplicationManager:
 
     def __init__(self) -> None:
         self.log = logging.getLogger(__name__)
-        self.command_handlers: CommandHandlerRegistryType = {}
+        self.handlers: CommandHandlerRegistryType = {}
         self.build()
 
         if config.add_base_handler:
@@ -41,48 +51,82 @@ class ApplicationManager:
 
         self.application = application_builder.build()
 
-    def register(self, command: HandlerType, name: Optional[str] = None, group: Optional[int] = None) -> None:
-        """Register a command handler, by using the register decorator.
+    def register_handler(
+        self, handler: BaseHandler[Update, ContextTypes.DEFAULT_TYPE], name: str, group: Optional[int] = None
+    ) -> None:
+        """Register a handler.
 
         Args:
-            command: The command to be added to the registry.
-            name (optional): The name of the command to be registered. If not provided, the ``command.__name__``
+            handler: The handler to be added to the registry.
+            name: The name of the handler, used a key in the registry.
+            group (optional): The group identifier. Default is ``0``.
+        """
+        handler_cfg: RegisteredHandlerType = {"handler": handler}
+        if group is not None:
+            handler_cfg["group"] = group
+        self.handlers[name] = handler_cfg
+
+    def register_command_handler(
+        self, command_handler: HandlerType, name: Optional[str] = None, group: Optional[int] = None
+    ) -> None:
+        """Create and register a command handler.
+
+        Args:
+            command_handler: The command handler to be added to the registry.
+            name (optional): The name of the command to be registered. If not provided, the ``command_handler.__name__``
                 attribute will be used instead.
             group (optional): The group identifier. Default is ``0``.
         """
-        self.log.debug("Adding the handler %r to the bot", command.__name__)
-        command_cfg: RegisteredHandlerType = {"handler": CommandHandler(name or command.__name__, command)}
-        if group is not None:
-            command_cfg["group"] = group
-        self.command_handlers[name or command.__name__] = command_cfg
+        handler_name = name or command_handler.__name__
+        self.log.debug("Adding the command handler %r to the bot", handler_name)
+        self.register_handler(CommandHandler(handler_name, command_handler), handler_name, group)
+
+    def register_message_handler(
+        self,
+        message_handler: HandlerType,
+        name: Optional[str] = None,
+        filters: Optional[filters_module.BaseFilter] = None,
+        group: Optional[int] = None,
+    ) -> None:
+        """Create and register a message handler.
+
+        Args:
+            message_handler: The message handler to be added to the registry.
+            name (optional): The name of the command to be registered. If not provided, the ``message_handler.__name__``
+                attribute will be used instead.
+            group (optional): The group identifier. Default is ``0``.
+        """
+        handler_name = name or message_handler.__name__
+        self.log.debug("Adding the message handler %r to the bot", name)
+        self.register_handler(MessageHandler(filters or filters_module.ALL, message_handler), handler_name, group)
 
     def enable_configured_handlers(self) -> None:
-        """Enable command handlers set as active in user configuration."""
+        """Enable handlers set as active in user configuration."""
         for command_name, command_cfg in config.commands.items():
             if command_cfg.active:
-                if command_name not in self.command_handlers:
-                    self.log.warning("Can't find command %r", command_name)
+                if command_name not in self.handlers:
+                    self.log.warning("Can't find handler %r", command_name)
                     continue
-                self.enable_command_handler(command_name)
+                self.enable_handler(command_name)
 
-    def enable_command_handler(self, command_name: str) -> None:
+    def enable_handler(self, handler_name: str) -> None:
         """Add a handler from the registry to the Telegram application.
 
         Args:
-            command_name: The command name to be added to the Telegram application.
+            handler_name: The command name to be added to the Telegram application.
         """
-        if command_name not in self.command_handlers:
-            raise ValueError(f"{command_name!r} does not exist")
-        self.log.debug("Enabling %r", command_name)
-        self.application.add_handler(**self.command_handlers[command_name])
+        if handler_name not in self.handlers:
+            raise ValueError(f"{handler_name!r} does not exist")
+        self.log.debug("Enabling %r", handler_name)
+        self.application.add_handler(**self.handlers[handler_name])
 
-    def disable_command_handler(self, command_name: str) -> None:
+    def disable_handler(self, handler_name: str) -> None:
         """Remove a handler from the registry to the Telegram application.
 
         Args:
-            command_name: The command name to be added to the Telegram application.
+            handler_name: The command name to be added to the Telegram application.
         """
-        if command_name not in self.command_handlers:
-            raise ValueError(f"{command_name!r} does not exist")
-        self.log.debug("Disabling %r", command_name)
-        self.application.remove_handler(**self.command_handlers[command_name])
+        if handler_name not in self.handlers:
+            raise ValueError(f"{handler_name!r} does not exist")
+        self.log.debug("Disabling %r", handler_name)
+        self.application.remove_handler(**self.handlers[handler_name])

@@ -39,7 +39,7 @@ The following is a description of the available fields in the configuration file
     [defaults]  # Default fields to be provided to telegram.ext.Defaults
     tzinfo = 'utc'
 
-    [commands]  # See 'Creating your first command handler'
+    [handlers]  # See 'Creating your first handler'
 
     [logging]  # Logging configuration
     version = 1
@@ -70,17 +70,17 @@ All ``defaults`` fields are optional, and logging config can be tweaked to fit y
 
 You can specify the location of your config file with the ``TELEGRAM_CONFIG`` environment variable. If not set, it will try to load the config from the ``config.toml`` file, relative to the current working directory.
 
-Additionally, configuration variables can be read from environment variables (e.g. ``api_token`` will take the value of the environment variable ``telegram_api_key``).
+Additionally, settings can be read from environment variables (e.g. ``api_token`` will take the value of the environment variable ``telegram_api_key``).
 See `pydantic docs <https://pydantic-docs.helpmanual.io/usage/settings/>`_ for more details.
 
-Creating your first command handler
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Creating your first handler
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Each command handler is defined as a submodule of the ``botframework.commands`` module. We will take the ``ping`` command provided in this repository as an example. The structure of the module is as follow:
+Each handler is defined as a submodule of the ``botframework.handlers`` module. We will take the ``ping`` command provided in this repository as an example. The structure of the module is as follow:
 
 .. code-block::
 
-    commands
+    handlers
     ├── ping
     ├──── __init__.py
     ├──── config.py
@@ -93,16 +93,20 @@ The ``handler.py`` file contains the definition of the async handler:
     from telegram import Update
     from telegram.ext import ContextTypes
 
-    from botframework.manager import register
+    from botframework.manager import command_handler
 
-    @register
+    @command_handler
     async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         ...
 
-All handlers must be decorated using the ``register`` decorator, so that they are correctly picked up by the application manager. The ``register`` decorator takes two optional arguments:
+All handlers must be decorated using either the ``command_handler`` or ``message_handler`` decorator, so that they are correctly picked up by the application manager. The decorator takes two optional arguments:
 
 - ``name``: ``str``, the name of the handler. If not provided, the handler's ``__name__`` attribute will be used.
 - ``group``: ``int``, the group identifier of the handler (``python-telegram-bot`` will use the default value of ``0``).
+
+If you are using the ``command_handler`` and you do not provide a name, the handler's ``__name__`` attribute will be used as the ``command`` attribute of ``CommandHandler``.
+
+You can specify filters to the ``message_handler`` as well.
 
 If you want to add user configuration for this handler, you can define a pydantic model in ``config.py``:
 
@@ -120,7 +124,7 @@ If you want to add user configuration for this handler, you can define a pydanti
 
 
     try:
-        config = Config(**bot_config.commands["ping"].env)
+        config = Config(**bot_config.handlers["ping"].env)
     except ValidationError as e:
         logging.exception("Error when validating config", exc_info=e)
         raise SystemExit()
@@ -129,11 +133,11 @@ And finally here is the corresponding user configuration:
 
 .. code-block:: toml
 
-    [commands]  # Section to configure your defined commands
+    [handlers]  # Section to configure your defined handlers
 
-    [commands.ping]  # The name of the command should correspond to the one provided in the register decorator
+    [handlers.ping]  # The name of the handler should correspond to the one provided in the register decorator
     active = true  # Whether the command should be added to the bot or not
-    [commands.ping.env]  # Command related configuration
+    [handlers.ping.env]  # Command related configuration
     wait_time = 2
 
 Run the application
