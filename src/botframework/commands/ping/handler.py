@@ -3,12 +3,12 @@ import asyncio
 from telegram import Update
 from telegram.ext import ContextTypes
 
-from botframework.manager import register
+from botframework.manager import command_handler
 
 from .config import config
 
 
-@register
+@command_handler
 async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     context.bot_data.setdefault("ping", {})

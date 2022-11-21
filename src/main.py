@@ -13,3 +13,4 @@ if __name__ == "__main__":
     application_manager.enable_configured_handlers()
     log.info("Starting Telegram bot...")
     application_manager.application.run_polling()
+    log.info("Telegram bot up and running")
