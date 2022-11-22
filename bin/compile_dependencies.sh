@@ -24,6 +24,7 @@ export CUSTOM_COMPILE_COMMAND="./bin/compile_dependencies.sh"
 # Build base dependencies
 pip-compile \
     --no-emit-index-url \
+    --resolver backtracking \
     -o requirements/requirements.txt \
     "$@" \
     pyproject.toml
@@ -31,6 +32,7 @@ pip-compile \
 # Build dev dependencies
 pip-compile \
     --no-emit-index-url \
+    --resolver backtracking \
     --extra=dev \
     -o requirements/dev.txt \
     "$@" \
