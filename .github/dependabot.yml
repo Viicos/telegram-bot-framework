@@ -8,3 +8,9 @@ updates:
       - "Viicos"
     commit-message:
       prefix: ":arrow_up:"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    assignees:
+      - "Viicos"
