@@ -6,5 +6,5 @@ updates:
       interval: "daily"
     assignees:
       - "Viicos"
-    commit-messages:
+    commit-message:
       prefix: ":arrow_up:"
