@@ -16,11 +16,12 @@ name = "telegram-bot-framework"
 version = "0.0.1"
 requires-python = ">=3.7"
 dependencies = [
-    "python-telegram-bot==20.0a5",
+    "python-telegram-bot==20.0a6",
     "python-dotenv==0.21.0",
     "tomli==2.0.1;python_full_version<'3.11.0a7'",
     "pydantic==1.10.2",
-    "typing_extensions==4.4.0"
+    "typing_extensions==4.4.0",
+    "pytz==2022.6"
 ]
 
 [project.optional-dependencies]

@@ -24,7 +24,9 @@ pydantic==1.10.2
     # via telegram-bot-framework (pyproject.toml)
 python-dotenv==0.21.0
     # via telegram-bot-framework (pyproject.toml)
-python-telegram-bot==20.0a5
+python-telegram-bot==20.0a6
+    # via telegram-bot-framework (pyproject.toml)
+pytz==2022.6
     # via telegram-bot-framework (pyproject.toml)
 rfc3986[idna2008]==1.5.0
     # via httpx
