@@ -20,7 +20,7 @@ from telegram.constants import ParseMode
 C = TypeVar("C", bound="Config")
 
 
-class Command(BaseModel):
+class Handler(BaseModel):
     active: bool
     env: Dict[str, Any]
 
@@ -51,7 +51,7 @@ class Config(BaseSettings):
     persistence: bool
     persistence_filepath: Optional[Path] = None
     add_base_handler: bool
-    commands: Dict[str, Command]
+    handlers: Dict[str, Handler]
     defaults: Optional[Defaults] = None
     logging: Dict[str, Any]
 

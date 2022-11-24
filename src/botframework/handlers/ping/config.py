@@ -10,7 +10,7 @@ class Config(BaseModel):
 
 
 try:
-    config = Config(**bot_config.commands["ping"].env)
+    config = Config(**bot_config.handlers["ping"].env)
 except ValidationError as e:
     logging.exception("Error when validating config", exc_info=e)
     raise SystemExit()
