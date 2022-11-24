@@ -9,6 +9,6 @@ def autodiscover_handlers(*module_names: str) -> None:
     """
     for module in module_names:
         try:
-            import_module(f"botframework.commands.{module}.handler")
+            import_module(f"botframework.handlers.{module}.handler")
         except ModuleNotFoundError:
             pass

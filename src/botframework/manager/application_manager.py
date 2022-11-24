@@ -14,8 +14,8 @@ from telegram.ext import (
     filters as filters_module,
 )
 
-from botframework.commands import base_callback
 from botframework.config import config
+from botframework.handlers import base_callback
 from botframework.utils.typing import CommandHandlerRegistryType, HandlerType, RegisteredHandlerType
 
 
