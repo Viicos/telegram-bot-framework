@@ -5,11 +5,11 @@ EXPOSE 443
 
 RUN apt-get update && apt-get -y upgrade
 
+WORKDIR /app
+
 RUN useradd -M user
 RUN chown -R user /app
 USER user
-
-WORKDIR /app
 
 COPY ./requirements /app/requirements
 RUN pip install -U pip setuptools \
