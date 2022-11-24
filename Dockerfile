@@ -7,13 +7,13 @@ RUN apt-get update && apt-get -y upgrade
 
 WORKDIR /app
 
-RUN useradd -M user
-RUN chown -R user /app
-USER user
-
 COPY ./requirements /app/requirements
 RUN pip install -U pip setuptools \
     && pip install -r requirements/requirements.txt
+
+RUN useradd -M user
+RUN chown -R user /app
+USER user
 
 COPY . /app/
 
