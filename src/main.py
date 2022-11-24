@@ -8,7 +8,7 @@ from botframework.utils.module_loading import autodiscover_handlers
 if __name__ == "__main__":
     logging.config.dictConfig(config.logging)
     log = logging.getLogger("botframework")
-    autodiscover_handlers(*config.commands.keys())
+    autodiscover_handlers(*config.handlers.keys())
 
     application_manager.enable_configured_handlers()
     log.info("Starting Telegram bot...")
