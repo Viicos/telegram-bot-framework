@@ -102,12 +102,12 @@ class ApplicationManager:
 
     def enable_configured_handlers(self) -> None:
         """Enable handlers set as active in user configuration."""
-        for command_name, command_cfg in config.commands.items():
-            if command_cfg.active:
-                if command_name not in self.handlers:
-                    self.log.warning("Can't find handler %r", command_name)
+        for handler_name, handler_cfg in config.handlers.items():
+            if handler_cfg.active:
+                if handler_name not in self.handlers:
+                    self.log.warning("Can't find handler %r", handler_name)
                     continue
-                self.enable_handler(command_name)
+                self.enable_handler(handler_name)
 
     def enable_handler(self, handler_name: str) -> None:
         """Add a handler from the registry to the Telegram application.
