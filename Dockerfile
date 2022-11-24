@@ -11,7 +11,7 @@ COPY ./requirements /app/requirements
 RUN pip install -U pip setuptools \
     && pip install -r requirements/requirements.txt
 
-RUN useradd -M user
+RUN useradd -M -u 1000 user
 RUN chown -R user /app
 USER user
 
