@@ -11,11 +11,11 @@ COPY ./requirements /app/requirements
 RUN pip install -U pip setuptools \
     && pip install -r requirements/requirements.txt
 
+COPY . /app/
+
 RUN useradd -M -u 1000 user
 RUN chown -R user /app
 USER user
-
-COPY . /app/
 
 ENTRYPOINT ["python3"]
 CMD ["src/main.py"]
