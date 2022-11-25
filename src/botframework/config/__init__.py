@@ -4,7 +4,7 @@
 import logging
 import os
 from pathlib import Path
-from typing import Any, Dict, Optional, TypeVar
+from typing import Any, Dict, Optional, Tuple
 
 import pytz
 
@@ -15,9 +15,14 @@ except ModuleNotFoundError:
 
 from dotenv import find_dotenv, load_dotenv
 from pydantic import BaseModel, BaseSettings, SecretStr, ValidationError, root_validator, validator
+from pydantic.env_settings import SettingsSourceCallable
 from telegram.constants import ParseMode
 
-C = TypeVar("C", bound="Config")
+
+def toml_config_settings(settings: BaseSettings) -> Dict[str, Any]:
+    encoding = settings.__config__.env_file_encoding
+    with open(Path(os.environ.get("TELEGRAM_CONFIG", "config.toml")), "rb", encoding=encoding) as config_file:
+        return tomllib.load(config_file)  # type: ignore[no-any-return]
 
 
 class Handler(BaseModel):
@@ -58,14 +63,14 @@ class Config(BaseSettings):
     class Config:
         env_prefix = "telegram_"
 
-    @classmethod
-    def from_toml(cls: type[C], path: Path) -> C:
-        if not path.exists():
-            raise FileNotFoundError(f"Config filepath {path} was not found")
-        if not path.is_file():
-            raise FileNotFoundError(f"Config filepath {path} is not a file.")
-        with open(path, "rb") as config_file:
-            return cls(**tomllib.load(config_file))
+        @classmethod
+        def customise_sources(
+            cls,
+            init_settings: SettingsSourceCallable,
+            env_settings: SettingsSourceCallable,
+            file_secret_settings: SettingsSourceCallable,
+        ) -> Tuple[SettingsSourceCallable, ...]:
+            return (init_settings, env_settings, toml_config_settings, file_secret_settings)
 
     @root_validator(skip_on_failure=True)
     def validate_config(cls, values: Dict[str, Any]) -> Dict[str, Any]:
@@ -79,7 +84,7 @@ load_dotenv(dotenv_path=find_dotenv(usecwd=True))
 
 
 try:
-    config = Config.from_toml(Path(os.environ.get("TELEGRAM_CONFIG", "config.toml")))
+    config = Config()
 except ValidationError as e:
     logging.exception("Error when validating config", exc_info=e)
     raise SystemExit()
