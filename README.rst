@@ -21,6 +21,23 @@ Introduction
 This framework provides a convenient development environment to create and configure command handlers for your Telegram bot. Application and created command handlers are configurable through
 the use of `pydantic <https://github.com/pydantic/pydantic>`_.
 
+Installation
+------------
+
+It is strongly recommended to use a `virtual environment <https://docs.python.org/3/library/venv.html>`_ to install and run the application.
+
+`pip-tools <https://github.com/jazzband/pip-tools>`_ is the recommended way of handling requirements. Before using the application, install ``pip-tools`` and run the following script:
+
+.. code-block:: shell
+
+    ./bin/compile-dependencies.sh
+
+You can then use ``pip`` to install requirements:
+
+.. code-block:: shell
+
+    pip install -r requirements/requirements.txt  // or dev.txt
+
 Configure your bot
 ------------------
 
@@ -148,5 +165,3 @@ To run the application, you can call the ``main.py`` file:
 .. code-block:: shell
 
     python src/main.py
-
-It is strongly recommended to use a `virtual environment <https://docs.python.org/3/library/venv.html>`_ to run the application.

@@ -8,7 +8,6 @@ updates:
       - "Viicos"
     commit-message:
       prefix: ":arrow_up:"
-    open-pull-requests-limit: 0
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
