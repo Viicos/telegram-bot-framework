@@ -14,5 +14,5 @@ jobs:
           python-version: '3.10'
       - run: pip install -U pip
       - run: pip install mypy==0.991 types-pytz
-      - run: pip install -r requirements/requirements.txt
+      - run: pip install .  # Using pyproject.toml dependencies is fine
       - run: mypy --strict src/
