@@ -6,9 +6,7 @@ from botframework.utils.typing import HandlerType
 
 
 @overload
-def command_handler(
-    function: None, *, name: Optional[str] = None, group: Optional[int] = None
-) -> Callable[[HandlerType], HandlerType]:
+def command_handler(*, name: Optional[str] = None, group: Optional[int] = None) -> Callable[[HandlerType], HandlerType]:
     ...
 
 
@@ -36,7 +34,7 @@ def command_handler(
 
 @overload
 def message_handler(
-    function: None, *, name: Optional[str] = None, filters: Optional[BaseFilter] = None, group: Optional[int] = None
+    *, name: Optional[str] = None, filters: Optional[BaseFilter] = None, group: Optional[int] = None
 ) -> Callable[[HandlerType], HandlerType]:
     ...
 
