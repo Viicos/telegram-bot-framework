@@ -27,6 +27,6 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pip-tools==6.12.1",
-    "isort==5.10.1",
+    "isort==5.11.4",
     "black==22.12.0"
 ]
