@@ -18,6 +18,8 @@ from pydantic import BaseModel, BaseSettings, SecretStr, ValidationError, root_v
 from pydantic.env_settings import SettingsSourceCallable
 from telegram.constants import ParseMode
 
+from botframework.utils.constants import LogLevels
+
 
 def toml_config_settings(settings: BaseSettings) -> Dict[str, Any]:
     encoding = settings.__config__.env_file_encoding
@@ -56,6 +58,7 @@ class Config(BaseSettings):
     persistence: bool
     persistence_filepath: Optional[Path] = None
     add_base_handler: bool
+    base_handler_log_level: LogLevels = "info"
     handlers: Dict[str, Handler]
     defaults: Optional[Defaults] = None
     logging: Dict[str, Any]
