@@ -2,6 +2,7 @@ api_token = 'change_me'
 persistence = true
 persistence_filepath = 'bot.data'
 add_base_handler = true
+base_handler_log_level = 'info'
 
 [handlers]
 

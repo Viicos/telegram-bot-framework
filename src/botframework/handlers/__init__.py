@@ -3,6 +3,9 @@ import logging
 from telegram import Update
 from telegram.ext import ContextTypes
 
+from botframework.config import config
+from botframework.utils.constants import name_to_level
+
 
 async def base_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
@@ -10,4 +13,4 @@ async def base_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     Additionnal logic can be added in this callback.
     """
     log = logging.getLogger("botframework")
-    log.info("Incoming update: %s", update)
+    log.log(name_to_level.get(config.base_handler_log_level, logging.INFO), "Incoming update: %s", update)
